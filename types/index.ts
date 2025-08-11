@@ -9,9 +9,8 @@ export type CreateUserParams = {
   photo: string;
 };
 
-
 export enum FieldType {
-  INPUT = 'input',
+  INPUT = "input",
   TEXTAREA = "textarea",
 }
 
@@ -31,13 +30,28 @@ export type TemplateType = {
   form: TemplateFormField[];
 };
 
+export type outputEditorProps = {
+  editorData: {
+    result: string;
+    formValues: Record<string, string>;
+    templateType: TemplateType;
+    loading: boolean;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  };
+};
 
-export type outputEditorProps ={
-  aiOutput:string,
-  editorData:{
-    result:string,
-    formValues:Record<string,string>,
-    templateType:TemplateType
-  }
-}
+export type ContentProps = {
+  result: string;
+  formValues?: Record<string, string>;
+  templateType: TemplateType;
+  title: string;
+  description: string;
+  contentId?: string;
+};
 
+export type AiGenerateOptions = {
+  model?: "gemini-2.5-pro" | "gemini-2.5-flash";
+  prompt: string;
+  updateText?: (text: string ) => void;
+  stream?: boolean;
+};

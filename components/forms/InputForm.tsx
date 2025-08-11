@@ -22,9 +22,11 @@ type InputFormProps={
   templateType:TemplateType
   setResult:React.Dispatch<React.SetStateAction<string>>
   setFormValues:(values: Record<string, string>) => void;
+  loading:boolean,
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const InputForm = ({ templateType,setResult ,setFormValues }:InputFormProps) => {
+const InputForm = ({ templateType,setResult ,setFormValues,loading,setLoading }:InputFormProps) => {
   const formSchema = generateSchemaFromTemplate(templateType.form);
 
   const initialeValues = templateType.form.reduce<Record<string, string>>(
@@ -42,10 +44,14 @@ const InputForm = ({ templateType,setResult ,setFormValues }:InputFormProps) => 
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setResult("")
+    setLoading(true)
     const prompt = templateType.aiPrompt;
     const finalePrompt = JSON.stringify(values) + "," + prompt;
-
-    const response = await AiGenerate(finalePrompt, (chunkText) => {setResult((prev) => (prev || "") + (chunkText || ""))},true);
+    const AiOptions={prompt:finalePrompt,updateText: (text:string ) => {setResult((prev) => (prev || "") + (text || ""))},stream:true}
+    //@ts-ignore
+    setFormValues(values);
+    const response = await AiGenerate(AiOptions);
+    if(response.status === "success") setLoading(false)
   }
   return (
     <div>
@@ -81,7 +87,7 @@ const InputForm = ({ templateType,setResult ,setFormValues }:InputFormProps) => 
               )}
             />
           ))}
-          <Button type="submit" className="p-4 w-full">
+          <Button disabled={loading} type="submit" className="p-4 w-full">
             Generate
           </Button>
         </form>

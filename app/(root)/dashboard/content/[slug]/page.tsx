@@ -19,12 +19,15 @@ const Page = () => {
 
   const [result, setResult] = useState<string>("");
 
-  const [formValues, setFormValues] = useState<Record<string, string>>({});
+  const [formValues, setFormValues] = useState({});
+  const [loading, setLoading] = useState<boolean>(false)
 
   const editorData = {
     result,
     formValues,
     templateType,
+    loading,
+    setLoading
   };
 
   return (
@@ -49,13 +52,15 @@ const Page = () => {
           templateType={templateType}
           setResult={setResult}
           setFormValues={setFormValues}
+          loading={loading}
+          setLoading={setLoading}
         />
       </section>
 
       {/* Output Section */}
       <section className="w-full flex-grow overflow-auto">
         {/* 👇 You can pass editorData if needed */}
-        <OutputEditor aiOutput={result} editorData={editorData} />
+        <OutputEditor  editorData={editorData} />
       </section>
     </section>
   );

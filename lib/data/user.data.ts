@@ -5,7 +5,6 @@ import { redirect } from "next/navigation";
 import { prisma } from "../prisma";
 
 export const GetUser = async () => {
-
   const { userId } = await auth();
   if (!userId) redirect("/");
 

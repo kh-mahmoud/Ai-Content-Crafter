@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "sonner";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -29,7 +30,19 @@ export default function RootLayout({
       }}
     >
       <html lang="en">
-        <body className={`${poppins.variable}  antialiased`}>{children}</body>
+        <body className={`${poppins.variable}  antialiased`}>
+          {children}
+          <Toaster
+            // toastOptions={{
+            //   classNames: {
+            //     error: "bg-background border-border text-muted",
+            //     loading: "bg-background border-border text-muted-foreground",
+            //   },
+            // }}
+            richColors
+            position="bottom-right"
+          />
+        </body>
       </html>
     </ClerkProvider>
   );
