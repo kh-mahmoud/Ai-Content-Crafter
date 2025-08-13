@@ -30,9 +30,9 @@ model Content {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   description String
-  author      User     @relation(fields: [userId], references: [id])
+  author      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String   @db.ObjectId
-  slug        String
+  slug        String?
   formData    Json?
   content     String
   privacy     Type     @default(PRIVATE)
