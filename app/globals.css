@@ -134,13 +134,132 @@ h3{
 }
 
 @layer components {
-   .card-container{
-      @apply bg-white rounded-2xl p-5 shadow-md hover:shadow-lg transition-all border border-gray-100 ;
-   }
+  /* dashboar */
+  .hero-section {
+    @apply bg-[url('/banner-bg.png')] bg-cover bg-center bg-no-repeat 
+           justify-items-center flex-col gap-y-5 p-10 text-white text-center;
+  }
+
+  .hero-title {
+    @apply md:text-5xl font-bold leading-tight text-center;
+  }
+
+  .hero-highlight {
+    @apply text-[#FFED8A];
+  }
+
+  .hero-subtitle {
+    @apply text-lg max-w-2xl;
+  }
+
+  .templates-section {
+    @apply p-10 bg-background;
+  }
+
+  .templates-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6;
+  }
+
+  .no-results-text {
+    @apply text-center text-gray-500 mt-10;
+  }
+
 
    .input-section-container{
      @apply bg-white rounded-2xl p-5 shadow-md transition-all border border-gray-100 ;
    }
+  /* loader */
+    .loading-state {
+    @apply justify-items-center w-full mb-2;
+  }
+
+ /* contentCard */
+  .card-container {
+    @apply bg-card flex flex-col rounded-xl p-4 shadow-sm border hover:shadow-md transition overflow-hidden;
+  }
+
+  .card-header {
+    @apply justify-items-between gap-2 pb-0;
+  }
+
+  .card-title-wrapper {
+    @apply flex items-center gap-2 min-w-0;
+  }
+
+  .card-title {
+    @apply text-lg font-semibold truncate min-w-0;
+  }
+
+  .copy-btn {
+    @apply p-2 rounded-full bg-white cursor-pointer shadow hover:bg-muted transition shrink-0;
+  }
+
+  .card-description {
+    @apply pt-2 space-y-2 flex-1;
+  }
+
+  .card-desc-text {
+    @apply text-sm text-muted-foreground line-clamp-2;
+  }
+
+  .slug-badge {
+    @apply text-xs bg-primary font-medium;
+  }
+
+  .card-footer {
+    @apply justify-items-between mt-3 pt-0;
+  }
+
+  .date-text {
+    @apply text-xs text-muted-foreground;
+  }
+
+  .privacy-select {
+    @apply !h-7 cursor-pointer w-[100px] text-xs;
+  }
+
+  .delete-btn {
+    @apply hover:bg-destructive/10;
+  }
+  /* templateCard */
+  .template-card-container {
+    @apply bg-card flex flex-col rounded-xl p-4 shadow-sm border hover:shadow-md transition overflow-hidden;
+  }
+
+  .headerRow {
+    @apply flex items-center gap-3 mb-4;
+  }
+
+  .truncate-title {
+    @apply font-semibold text-lg line-clamp-1;
+  }
+
+  .descText {
+    @apply text-sm text-gray-600 mb-4 line-clamp-2;
+  }
+
+  /* editor */
+   .editor-header {
+    @apply  !justify-items-between !mb-2;
+  }
+
+  .editor-title {
+    @apply !font-bold !text-primary !text-xl;
+  }
+
+  .editor-buttons {
+    @apply !flex !gap-2;
+  }
+
+  .btn-save {
+    @apply !bg-success hover:!bg-success/90;
+  }
+
+  .btn-publish {
+    @apply !bg-primary;
+  }
+
+  
 }
 
 @utility loader{
@@ -162,3 +281,13 @@ h3{
     60%{background-position:0%  50%, 50% 100%,100%   0%}
     80%{background-position:0%  50%, 50%  50%,100% 100%}
 }
+
+
+@utility justify-items-between{
+  @apply flex justify-between items-center;
+}
+
+@utility justify-items-center{
+  @apply flex justify-center items-center;
+}
+
