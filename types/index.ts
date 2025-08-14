@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import { Content, User } from "@prisma/client";
 
 export type CreateUserParams = {
   clerkId: string;
@@ -31,19 +31,19 @@ export type TemplateType = {
 };
 
 export type outputEditorProps = {
-  editorData: {
-    result: string;
-    formValues: Record<string, string>;
-    templateType: TemplateType;
-    loading: boolean;
-    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  editorData?: {
+    result?: string;
+    formValues?: Record<string, string>;
+    templateType?: TemplateType;
+    loading?: boolean;
+    setLoading?: React.Dispatch<React.SetStateAction<boolean>>;
   };
 };
 
 export type ContentProps = {
   result: string;
   formValues?: Record<string, string>;
-  templateType: TemplateType;
+  templateType?: TemplateType;
   title: string;
   description: string;
   contentId?: string;
@@ -55,3 +55,14 @@ export type AiGenerateOptions = {
   updateText?: (text: string ) => void;
   stream?: boolean;
 };
+export interface ContentCardProps extends Content {
+  author: {
+    clerkId:string
+  };
+}
+
+export type ContentListProps = {
+  fetchData: () => Promise<ContentCardProps[] | undefined>;
+};
+
+
