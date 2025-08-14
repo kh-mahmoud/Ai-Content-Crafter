@@ -3,11 +3,15 @@
 import { ContentProps } from "@/types";
 import { prisma } from "../prisma";
 import { GetUser } from "../data/user.data";
+import {Type } from "@prisma/client";
+import { revalidatePath } from "next/cache";
+
 
 //save the user content
 export const Save_Content = async (userContent: ContentProps) => {
   try {
     const user = await GetUser();
+    
 
     let content;
     if (userContent.contentId) {
@@ -27,7 +31,7 @@ export const Save_Content = async (userContent: ContentProps) => {
           description: userContent.description,
           formData: JSON.stringify(userContent.formValues),
           content: userContent.result,
-          slug: userContent.templateType.slug,
+          slug: userContent?.templateType?.slug,
           author: {
             connect: { id: user?.id },
           },
@@ -67,7 +71,7 @@ export const Publish_Content = async (userContent: ContentProps) => {
           description: userContent.description,
           formData: JSON.stringify(userContent?.formValues),
           content: userContent.result,
-          slug: userContent.templateType.slug,
+          slug: userContent?.templateType?.slug,
           author: {
             connect: { id: user?.id },
           },
@@ -84,3 +88,31 @@ export const Publish_Content = async (userContent: ContentProps) => {
     await prisma.$disconnect();
   }
 };
+
+
+export const DeleteContent = async (contentId: string) => {
+  try {
+    const deletedContent = await prisma.content.delete({ where: { id: contentId } });
+    if (!deletedContent) throw new Error("Content not found");
+    revalidatePath('/vault')
+    revalidatePath('/explore')
+    return { message: "success", data: deletedContent };
+  } catch (error) {
+    console.log(error);
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
+export const UpdateContentPrivacy = async(contentId: string, privacy:Type)=>{
+    try {
+    const updatedContent = await prisma.content.update({ where: { id: contentId },data: { privacy } });
+    if (!updatedContent) throw new Error("Content not found");
+    revalidatePath("/explore")
+    return { message: "success", data: updatedContent };
+  } catch (error) {
+    console.log(error);
+  } finally {
+    await prisma.$disconnect();
+  }
+}

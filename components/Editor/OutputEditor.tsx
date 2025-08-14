@@ -2,7 +2,6 @@
 
 import { Editor } from "@toast-ui/react-editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
-
 import { useEffect, useRef, useState } from "react";
 import { outputEditorProps } from "@/types";
 import { Button } from "../ui/button";
@@ -10,6 +9,7 @@ import { AiGenerate } from "@/lib/AiModel";
 import { Publish_Content, Save_Content } from "@/lib/actions/content.actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import redis from "@/lib/redis";
 
 const OutputEditor = ({ editorData }: outputEditorProps) => {
   const editorRef: any = useRef(null);
@@ -25,20 +25,17 @@ const OutputEditor = ({ editorData }: outputEditorProps) => {
 
   useEffect(() => {
     const editorInstance = editorRef.current?.getInstance();
-    editorInstance.setMarkdown(editorData.result);
+    editorInstance.setMarkdown(editorData?.result);
 
-    // Listen for changes
     editorInstance.on("change", () => {
       const content = editorInstance.getMarkdown().trim();
       setHasContent(content.length > 0);
     });
 
-    // Initial check
-    setHasContent(editorData.result.trim().length > 0);
-  }, [editorData.result]);
+    setHasContent(editorData?.result ? editorData?.result?.trim().length > 0 : false);
+  }, [editorData?.result]);
 
   const generateMetadata = async (content: string) => {
-    // If content hasn't changed, reuse old metadata
     if (content === lastContent && title && description) {
       return { title, description };
     }
@@ -46,15 +43,13 @@ const OutputEditor = ({ editorData }: outputEditorProps) => {
     const newTitle = await AiGenerate({
       model: "gemini-2.5-flash",
       prompt:
-        `Return ONLY a short title (max 6 words, no punctuation except spaces) for the following content: ${content}` ||
-        "",
+        `Return ONLY a short title (max 6 words, no punctuation except spaces) for the following content: ${content}` || "",
     });
 
     const newDescription = await AiGenerate({
       model: "gemini-2.5-flash",
       prompt:
-        `Return ONLY a single-sentence description (max 20 words) for the following content: ${content}` ||
-        "",
+        `Return ONLY a single-sentence description (max 20 words) for the following content: ${content}` || "",
     });
 
     setTitle(newTitle.result);
@@ -64,85 +59,53 @@ const OutputEditor = ({ editorData }: outputEditorProps) => {
     return { title: newTitle.result, description: newDescription.result };
   };
 
-  const handleSave = async () => {
-    try {
-      if (!hasContent)
-        return toast.error("Please provide content before saving");
+  const processContent = async (mode: "save" | "publish") => {
+    if (!hasContent) return toast.error(`Please provide content before ${mode}ing`);
+    toast.loading(`${mode === "save" ? "Saving" : "Publishing"}...`, { id: contentId + mode });
+    setSaveLoad(true);
+    editorData?.setLoading?.(true);
 
-      setSaveLoad(true);
-      editorData.setLoading(true);
-      const editorInstance = editorRef.current?.getInstance();
-      const currentContent = editorInstance.getMarkdown().trim();
+    const editorInstance = editorRef.current?.getInstance();
+    const currentContent = editorInstance.getMarkdown().trim();
+    const { title, description } = await generateMetadata(currentContent);
+    const { loading, setLoading, ...data } = editorData || {};
 
-      const { title, description } = await generateMetadata(currentContent);
-      const { loading, setLoading, ...dataToSave } = editorData;
+    const action = mode === "save" ? Save_Content : Publish_Content;
+    const result = await action({
+      ...data,
+      result: currentContent,
+      title,
+      description,
+      contentId,
+    });
 
-      const content = await Save_Content({
-        ...dataToSave,
-        title,
-        description,
-        contentId,
-      });
-
-      if (content?.message === "success") {
-        setContentId(content?.data?.id);
-        toast.success("Content saved successfully");
-        setLoading(false);
-        setSaveLoad(false);
-      }
-    } catch (error) {
-      console.error(error);
+    if (result?.message === "success") {
+      if (mode === "save") setContentId(result?.data?.id);
+      else router.push(`/dashboard/explore`);
+      toast.success(`Content ${mode}d successfully`, { id: contentId + mode });
+      await redis.del('content');
     }
-  };
 
-  const handlePublish = async () => {
-    try {
-      if (!hasContent)
-        return toast.error("Please provide content before publishing");
-
-      setSaveLoad(true);
-      editorData.setLoading(true);
-      const editorInstance = editorRef.current?.getInstance();
-      const currentContent = editorInstance.getMarkdown().trim();
-
-      const { title: metaTitle, description: metaDesc } =
-        await generateMetadata(currentContent);
-
-      const { loading, setLoading, ...dataToPub } = editorData;
-
-      const content = await Publish_Content({
-        ...dataToPub,
-        title: metaTitle,
-        description: metaDesc,
-        contentId,
-      });
-
-      if (content?.message === "success") {
-        router.push(`/dashboard/explore`);
-        setSaveLoad(false);
-        editorData.setLoading(false);
-      }
-    } catch (error) {
-      console.error(error);
-    }
+    setSaveLoad(false);
+    editorData?.setLoading?.(false);
   };
 
   return (
     <>
-      <div className="flex justify-between items-center mb-2">
-        <h1 className="font-bold text-primary text-xl">Result</h1>
-        <div className="flex gap-2">
+      <div className="editor-header">
+        <h1 className="editor-title">Result</h1>
+        <div className="editor-buttons">
           <Button
-            onClick={handleSave}
-            className="bg-success"
-            disabled={!hasContent || editorData.loading || SaveLoad}
+            onClick={() => processContent("save")}
+            className="btn-save"
+            disabled={!hasContent || editorData?.loading || SaveLoad}
           >
             Save
           </Button>
           <Button
-            onClick={handlePublish}
-            className="bg-primary"
-            disabled={!hasContent || editorData.loading || SaveLoad}
+            onClick={() => processContent("publish")}
+            className="btn-publish"
+            disabled={!hasContent || editorData?.loading || SaveLoad}
           >
             Publish
           </Button>

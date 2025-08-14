@@ -19,12 +19,12 @@ const Page = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-[url(/banner-bg.png)] bg-cover bg-center gap-y-5 bg-no-repeat flex flex-col items-center justify-center p-10 text-white text-center">
-        <h2 className="md:text-5xl font-bold leading-tight  text-center">
+      <section className="hero-section">
+        <h2 className="hero-title">
           Unleash Your Creative Visions <br />
-          With <span className="text-[#FFED8A]">Verbi AI</span>
+          With <span className="hero-highlight">Verbi AI</span>
         </h2>
-        <p className="text-lg max-w-2xl">
+        <p className="hero-subtitle">
           Discover a suite of AI-powered tools designed to help you create
           content faster, better, and smarter.
         </p>
@@ -32,14 +32,14 @@ const Page = () => {
       </section>
 
       {/* Templates Section */}
-      <section className="p-10 bg-background">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <section className="templates-section">
+        <div className="templates-grid">
           {filteredTemplates.map((template) => (
             <TemplateCard key={template.slug} template={template} />
           ))}
         </div>
         {filteredTemplates.length === 0 && (
-          <p className="text-center text-gray-500 mt-10">
+          <p className="no-results-text">
             No templates match your search.
           </p>
         )}

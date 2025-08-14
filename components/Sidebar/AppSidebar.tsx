@@ -4,13 +4,13 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarSeparator,
 } from "../ui/sidebar";
 import NavHeader from "./NavHeader";
 import MainNav from "./MainNav";
 import NavFooter from "./NavFooter";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import DirectionButtons from "./DirectionButtons";
+
 
 const AppSidebar = () => {
   return (
@@ -19,8 +19,6 @@ const AppSidebar = () => {
       <SidebarHeader>
         <NavHeader />
       </SidebarHeader>
-
-      <SidebarSeparator className="!p-0 !m-0" />
 
       {/* navigation Content */}
       <SidebarContent>
@@ -36,7 +34,7 @@ const AppSidebar = () => {
       <SignedIn>
         {/* Footer */}
         <SidebarFooter>
-          <Suspense fallback={<div className="flex justify-center items-center w-full mb-2">Loading...</div>}>
+          <Suspense fallback={<div className="justify-items-center w-full mb-2">Loading...</div>}>
             <NavFooter />
           </Suspense>
         </SidebarFooter>

@@ -17,6 +17,7 @@ import { FieldType, TemplateType } from "@/types";
 import { generateSchemaFromTemplate } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import { AiGenerate } from "@/lib/AiModel";
+import { toast } from "sonner";
 
 type InputFormProps={
   templateType:TemplateType
@@ -43,6 +44,7 @@ const InputForm = ({ templateType,setResult ,setFormValues,loading,setLoading }:
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    toast.loading("Generating Content ...", { id: "generate" });
     setResult("")
     setLoading(true)
     const prompt = templateType.aiPrompt;
@@ -51,7 +53,10 @@ const InputForm = ({ templateType,setResult ,setFormValues,loading,setLoading }:
     //@ts-ignore
     setFormValues(values);
     const response = await AiGenerate(AiOptions);
-    if(response.status === "success") setLoading(false)
+    if(response.status === "success"){
+      setLoading(false)
+      toast.dismiss("generate");
+    }
   }
   return (
     <div>
