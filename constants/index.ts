@@ -1,5 +1,7 @@
 import { FieldType } from "@/types";
-import { Compass, LayoutDashboard, Settings, Vault } from "lucide-react";
+import { Compass, LayoutDashboard, Settings, Vault,ToyBrick } from "lucide-react";
+
+
 
 export const navigations = [
   {
@@ -16,6 +18,11 @@ export const navigations = [
     label: "Explore",
     link: "/dashboard/explore",
     icon: Compass,
+  },
+    {
+    label: "PlayGround",
+    link: "/dashboard/playground",
+    icon: ToyBrick,
   },
   {
     label: "Settings",
