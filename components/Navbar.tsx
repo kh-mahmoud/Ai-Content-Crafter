@@ -3,7 +3,7 @@ import NavItems from "./NavItems";
 
 const Navbar = () => {
   return (
-    <nav className="justify-items-between sticky top-0 z-10 w-full p-4 bg-white/70 backdrop-blur-3xl">
+    <nav className="justify-items-between sticky top-0 z-10 w-full p-4 bg-white">
       <SidebarTrigger className="cursor-pointer" />
       <NavItems />
     </nav>
