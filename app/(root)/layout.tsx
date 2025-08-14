@@ -11,10 +11,10 @@ export default function Layout({
 }>) {
 
   return (
-    <SidebarProvider>
+    <SidebarProvider >
       <main className="flex w-full">
         {<AppSidebar/>}
-        <div className="flex-1 w-full min-h-screen">
+        <div className="flex-1 w-full min-h-screen min-w-0">
           <Navbar />
           {children}
         </div>
