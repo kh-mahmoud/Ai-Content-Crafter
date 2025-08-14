@@ -33,12 +33,6 @@ export default function RootLayout({
         <body className={`${poppins.variable}  antialiased`}>
           {children}
           <Toaster
-            // toastOptions={{
-            //   classNames: {
-            //     error: "bg-background border-border text-muted",
-            //     loading: "bg-background border-border text-muted-foreground",
-            //   },
-            // }}
             richColors
             position="bottom-right"
           />
