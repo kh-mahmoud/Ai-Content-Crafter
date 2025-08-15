@@ -42,7 +42,6 @@ export default function ContentCard({ content }: { content: ContentCardProps }) 
       const response = await DeleteContent(content.id);
       if (response?.message === "success") {
         toast.success("Content deleted successfully", { id: content.id });
-        await redis.del("content");
       }
     } catch (error) {
       console.log(error);

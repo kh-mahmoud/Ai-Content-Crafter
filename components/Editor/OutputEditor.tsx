@@ -9,7 +9,6 @@ import { AiGenerate } from "@/lib/AiModel";
 import { Publish_Content, Save_Content } from "@/lib/actions/content.actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import redis from "@/lib/redis";
 
 const OutputEditor = ({ editorData }: outputEditorProps) => {
   const editorRef: any = useRef(null);
@@ -83,7 +82,6 @@ const OutputEditor = ({ editorData }: outputEditorProps) => {
       if (mode === "save") setContentId(result?.data?.id);
       else router.push(`/dashboard/explore`);
       toast.success(`Content ${mode}d successfully`, { id: contentId + mode });
-      await redis.del('content');
     }
 
     setSaveLoad(false);

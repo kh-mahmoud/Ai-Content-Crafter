@@ -1,14 +1,11 @@
 import React from "react";
 import ContentCard from "./ContentCard";
 import { ContentCardProps, ContentListProps } from "@/types";
-import { getOrSetCache } from "@/lib/utils";
+
 
 
 const ContentList = async ({ fetchData }: ContentListProps) => {
-  const userContent = await getOrSetCache<ContentCardProps[]>(
-    "content",
-    fetchData
-  );
+  const userContent = await fetchData();
 
   return (
     <div>

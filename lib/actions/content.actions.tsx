@@ -3,15 +3,13 @@
 import { ContentProps } from "@/types";
 import { prisma } from "../prisma";
 import { GetUser } from "../data/user.data";
-import {Type } from "@prisma/client";
+import { Type } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-
 
 //save the user content
 export const Save_Content = async (userContent: ContentProps) => {
   try {
     const user = await GetUser();
-    
 
     let content;
     if (userContent.contentId) {
@@ -21,6 +19,13 @@ export const Save_Content = async (userContent: ContentProps) => {
         data: {
           formData: JSON.stringify(userContent.formValues),
           content: userContent.result,
+        },
+        include: {
+          author: {
+            select: {
+              clerkId: true,
+            },
+          },
         },
       });
     } else {
@@ -34,6 +39,13 @@ export const Save_Content = async (userContent: ContentProps) => {
           slug: userContent?.templateType?.slug,
           author: {
             connect: { id: user?.id },
+          },
+        },
+        include: {
+          author: {
+            select: {
+              clerkId: true,
+            },
           },
         },
       });
@@ -62,6 +74,13 @@ export const Publish_Content = async (userContent: ContentProps) => {
           privacy: "PUBLIC",
           content: userContent.result,
         },
+        include: {
+          author: {
+            select: {
+              clerkId: true,
+            },
+          },
+        },
       });
     } else {
       // Create and publish new content
@@ -77,8 +96,19 @@ export const Publish_Content = async (userContent: ContentProps) => {
           },
           privacy: "PUBLIC",
         },
+        include: {
+          author: {
+            select: {
+              clerkId: true,
+            },
+          },
+        },
       });
     }
+
+    revalidatePath("/explore");
+    revalidatePath("/vault");
+
 
     return { message: "success", data: content };
   } catch (error) {
@@ -89,14 +119,24 @@ export const Publish_Content = async (userContent: ContentProps) => {
   }
 };
 
-
 export const DeleteContent = async (contentId: string) => {
   try {
-    const deletedContent = await prisma.content.delete({ where: { id: contentId } });
-    if (!deletedContent) throw new Error("Content not found");
-    revalidatePath('/vault')
-    revalidatePath('/explore')
-    return { message: "success", data: deletedContent };
+    const existedContent = await prisma.content.findUnique({
+      where: { id: contentId },
+    });
+    if (!existedContent) throw new Error("Content not found");
+
+
+    const deletedContent = await prisma.content.delete({
+      where: { id: contentId },
+    });
+
+    if (deletedContent) {
+      revalidatePath("/vault");
+      revalidatePath("/explore");
+    }
+
+    return { message: "success" };
   } catch (error) {
     console.log(error);
   } finally {
@@ -104,15 +144,28 @@ export const DeleteContent = async (contentId: string) => {
   }
 };
 
-export const UpdateContentPrivacy = async(contentId: string, privacy:Type)=>{
-    try {
-    const updatedContent = await prisma.content.update({ where: { id: contentId },data: { privacy } });
+export const UpdateContentPrivacy = async (
+  contentId: string,
+  privacy: Type
+) => {
+  try {
+    const updatedContent = await prisma.content.update({
+      where: { id: contentId },
+      data: { privacy },
+      include: {
+        author: {
+          select: {
+            clerkId: true,
+          },
+        },
+      },
+    });
     if (!updatedContent) throw new Error("Content not found");
-    revalidatePath("/explore")
+
     return { message: "success", data: updatedContent };
   } catch (error) {
     console.log(error);
   } finally {
     await prisma.$disconnect();
   }
-}
+};

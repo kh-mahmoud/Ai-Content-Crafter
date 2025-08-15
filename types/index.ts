@@ -55,6 +55,7 @@ export type AiGenerateOptions = {
   updateText?: (text: string ) => void;
   stream?: boolean;
 };
+
 export interface ContentCardProps extends Content {
   author: {
     clerkId:string
