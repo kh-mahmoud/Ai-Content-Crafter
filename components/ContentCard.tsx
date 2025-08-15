@@ -21,7 +21,6 @@ import {
 } from "@/lib/actions/content.actions";
 import { useAuth } from "@clerk/nextjs";
 import { ContentCardProps } from "@/types";
-import redis from "@/lib/redis";
 
 export default function ContentCard({ content }: { content: ContentCardProps }) {
   const { userId } = useAuth();

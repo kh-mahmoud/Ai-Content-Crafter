@@ -1,6 +1,6 @@
 import React from "react";
 import ContentCard from "./ContentCard";
-import { ContentCardProps, ContentListProps } from "@/types";
+import {ContentListProps } from "@/types";
 
 
 
