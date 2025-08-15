@@ -81,7 +81,6 @@ const OutputEditor = ({ editorData }: outputEditorProps) => {
     if (result?.message === "success") {
       if (mode === "save") setContentId(result?.data?.id);
       else router.push(`/dashboard/explore`);
-      await redis.del('content');
       toast.success(`Content ${mode}d successfully`, { id: contentId + mode });
     }
 
