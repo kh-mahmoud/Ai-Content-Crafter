@@ -34,7 +34,7 @@ export default function HeroSection() {
             <div className="relative mx-auto max-w-5xl overflow-hidden rounded-2xl border shadow-lg ring-1 ring-border">
               <Image
                 className="hidden dark:block"
-                src="/mail2.png"
+                src="/show.png"
                 alt="app screen"
                 width={1920}
                 height={1080}
