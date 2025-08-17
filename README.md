@@ -31,7 +31,7 @@ Verbi AI adapts to your vision and delivers results that feel **crafted, not gen
 1️⃣ **Clone the Repository**  
 ```bash
 git clone https://github.com/kh-mahmoud/Ai-Content-Crafter.git
-cd ai-content-crafter
+cd Ai-Content-Crafter
 ```
 
 2️⃣ Install Dependencies
