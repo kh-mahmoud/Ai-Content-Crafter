@@ -119,7 +119,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground scroll-smooth;
   }
   h1 {
   @apply max-sm:text-[3rem] text-6xl leading-tight xl:tracking-[-2px] font-semibold;

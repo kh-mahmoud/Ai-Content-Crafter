@@ -368,3 +368,21 @@ export const templates = [
     ],
   },
 ];
+
+export const features  =[
+              {
+                title: 'Multiple Templates',
+                description:
+                  'From blog titles to YouTube tags — choose a template and get tailored results instantly.',
+              },
+              {
+                title: 'AI-Powered Creativity',
+                description:
+                  'Break through writer’s block with AI suggestions designed to spark ideas and boost productivity.',
+              },
+              {
+                title: 'Fast & Easy to Use',
+                description:
+                  'Generate content in seconds with a simple interface built for creators, developers, and marketers.',
+              },
+            ]
