@@ -9,12 +9,12 @@ const DirectionButtons = () => {
     const {state} = useSidebar()
   return (
     <div className={`w-full h-full flex flex-col md:flex-row justify-center items-center transition-all gap-2 ${state=="collapsed" && "hidden"} `}>
-      <Link href={"/sign-up"}>
-        <Button className="font-bold">SignUp</Button>
+      <Link href={"/sign-in"}>
+        <Button variant='outline' className="font-bold">SignIn</Button>
       </Link>
 
-      <Link href={"/sign-in"}>
-        <Button className="font-bold">SignIn</Button>
+      <Link href={"/sign-up"}>
+        <Button className="font-bold">SignUp</Button>
       </Link>
     </div>
   );
