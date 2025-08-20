@@ -10,11 +10,11 @@ const DirectionButtons = () => {
   return (
     <div className={`w-full h-full flex flex-col md:flex-row justify-center items-center transition-all gap-2 ${state=="collapsed" && "hidden"} `}>
       <Link href={"/sign-in"}>
-        <Button variant='outline' className="font-bold">SignIn</Button>
+        <Button  className="font-bold">SignIn</Button>
       </Link>
 
       <Link href={"/sign-up"}>
-        <Button className="font-bold">SignUp</Button>
+        <Button variant='outline' className="font-bold">SignUp</Button>
       </Link>
     </div>
   );
