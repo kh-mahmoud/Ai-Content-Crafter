@@ -38,6 +38,7 @@ cd Ai-Content-Crafter
 
 ```bash
 npm install
+npm run prisma_generate
 ```
 
 3️⃣ Set Up Environment Variables
