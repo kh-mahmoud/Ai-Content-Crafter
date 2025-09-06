@@ -69,7 +69,7 @@ const InputForm = ({
     setFormValues(values);
 
     // Call backend API (Cloudflare Worker) with prompt + stream flag
-    const response = await fetch(process.env.NEXT_PUBLIC_WORKER, {
+    const response = await fetch(process.env.NEXT_PUBLIC_WORKER!, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prompt: finalePrompt, stream: true }),
