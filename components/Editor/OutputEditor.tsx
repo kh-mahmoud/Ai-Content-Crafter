@@ -47,7 +47,7 @@ const OutputEditor = ({ editorData }: outputEditorProps) => {
     }
 
     // --- Title request ---
-    const titleResponse = await fetch("https://verbi-ai-backend.khouchane036.workers.dev", {
+    const titleResponse = await fetch("process.env.NEXT_PUBLIC_WORKER", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -60,7 +60,7 @@ const OutputEditor = ({ editorData }: outputEditorProps) => {
     const newTitle = titleJson.result;
 
     // --- Description request ---
-    const descResponse = await fetch("https://verbi-ai-backend.khouchane036.workers.dev", {
+    const descResponse = await fetch("process.env.NEXT_PUBLIC_WORKER", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
