@@ -10,21 +10,27 @@ Verbi AI isn’t just another AI tool — it’s your **⚡ personal content pow
 🚀 From **catchy hooks** ✍️ to **full-length articles** 📚, from **code snippets** 💻 to **marketing copy** 📢 —  
 Verbi AI adapts to your vision and delivers results that feel **crafted, not generated**.  
 
-
 ## 🛠 Tech Stack
+
 - ⚡ **Next.js 15** — Modern app routing, Server & Client Components  
 - 🎨 **shadcn/ui + Tailwind CSS** — Fully responsive, themeable, and elegant  
 - 🔑 **Clerk** — Authentication & user management, fast and secure  
 - 📝 **Rich Text & Markdown Editing** — Powered by modern editors  
+- ☁️ **Cloudflare AI Workers** — Edge-deployed AI logic for ultra-low latency  
+- 🔗 **Cloudflare AI Gateways** — Secure, monitored, and optimized AI API routing  
 - 📱 **Fully Responsive** — Perfect across desktop, tablet, and mobile  
+
 ---
 
 ## 📦 Key Features
+
 - 🖌 **Beautiful, consistent UI design**  
 - 🔄 **Reusable & modular components**  
 - 🚀 **Easy to customize & scale**  
 - 🔒 **Accessibility-first design**  
 - 🤖 **AI-powered templates & role-based generation**  
+- 🌍 **Edge-powered AI inference** with Cloudflare AI Workers + Gateways for speed, security & cost efficiency  
+  
 ---
 ## ⚡ Quick Start Guide  
 
@@ -37,7 +43,7 @@ cd Ai-Content-Crafter
 2️⃣ Install Dependencies
 
 ```bash
-npm install
+npm install --force
 npm run prisma_generate
 ```
 
@@ -50,6 +56,7 @@ CLERK_WEBHOOK_SIGNING_SECRET=
 NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
 NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL=/dashboard
 NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL=/dashboard
+NEXT_PUBLIC_WORKER=
 GEMINI_API_KEY=
 ```
 4️⃣ Run the Development Server
