@@ -67,7 +67,7 @@ npm run dev
 At the heart of **Verbi AI** lies a simple promise:  **✨ Create smarter. Move faster. Dream bigger. ✨**
 
 Why settle for ordinary when you can unlock extraordinary?  
-👉 [**Try Verbi AI Live**] https://verbi-ai.vercel.app.</br>
+👉 [**Try Verbi AI Live**] https://www.ai-host.site.</br>
 
 Give it a ⭐ and Step into the future of content creation to turn your ideas into impact.  
 
