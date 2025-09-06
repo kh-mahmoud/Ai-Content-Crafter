@@ -5,7 +5,6 @@ import "@toast-ui/editor/dist/toastui-editor.css";
 import { useEffect, useRef, useState } from "react";
 import { outputEditorProps } from "@/types";
 import { Button } from "../ui/button";
-import { AiGenerate } from "@/lib/AiModel";
 import { Publish_Content, Save_Content } from "@/lib/actions/content.actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -26,50 +25,82 @@ const OutputEditor = ({ editorData }: outputEditorProps) => {
     const editorInstance = editorRef.current?.getInstance();
     editorInstance.setMarkdown(editorData?.result);
 
+    // update hasContent state whenever the editor changes
     editorInstance.on("change", () => {
       const content = editorInstance.getMarkdown().trim();
       setHasContent(content.length > 0);
     });
 
-    setHasContent(editorData?.result ? editorData?.result?.trim().length > 0 : false);
+    setHasContent(
+      editorData?.result ? editorData?.result?.trim().length > 0 : false
+    );
   }, [editorData?.result]);
 
+  /**
+   * Generate metadata (title + description) for the content
+   */
+
   const generateMetadata = async (content: string) => {
+    // Avoid re-generating if content hasn’t changed
     if (content === lastContent && title && description) {
       return { title, description };
     }
 
-    const newTitle = await AiGenerate({
-      model: "gemini-2.5-flash",
-      prompt:
-        `Return ONLY a short title (max 6 words, no punctuation except spaces) for the following content: ${content}` || "",
+    // --- Title request ---
+    const titleResponse = await fetch("https://verbi-ai-backend.khouchane036.workers.dev", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        prompt: `Return ONLY a short title (max 6 words, no punctuation except spaces) for the following content: ${content}`,
+        stream: false,
+      }),
     });
 
-    const newDescription = await AiGenerate({
-      model: "gemini-2.5-flash",
-      prompt:
-        `Return ONLY a single-sentence description (max 20 words) for the following content: ${content}` || "",
+    const titleJson = await titleResponse.json();
+    const newTitle = titleJson.result;
+
+    // --- Description request ---
+    const descResponse = await fetch("https://verbi-ai-backend.khouchane036.workers.dev", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        prompt: `Return ONLY a single-sentence description (max 20 words) for the following content: ${content}`,
+        stream: false,
+      }),
     });
 
-    setTitle(newTitle.result);
-    setDescription(newDescription.result);
+    const descJson = await descResponse.json();
+    const newDescription = descJson.result;
+
+    // Update local state
+    setTitle(newTitle);
+    setDescription(newDescription);
     setLastContent(content);
 
-    return { title: newTitle.result, description: newDescription.result };
+    return { title: newTitle, description: newDescription };
   };
 
+  /**
+   * Save or publish content
+   */
   const processContent = async (mode: "save" | "publish") => {
-    if (!hasContent) return toast.error(`Please provide content before ${mode}ing`);
-    toast.loading(`${mode === "save" ? "Saving" : "Publishing"}...`, { id: contentId + mode });
+    if (!hasContent)
+      return toast.error(`Please provide content before ${mode}ing`);
+    toast.loading(`${mode === "save" ? "Saving" : "Publishing"}...`, {
+      id: contentId + mode,
+    });
     setSaveLoad(true);
     editorData?.setLoading?.(true);
 
     const editorInstance = editorRef.current?.getInstance();
     const currentContent = editorInstance.getMarkdown().trim();
-    const { title, description } = await generateMetadata(currentContent);
-    const { loading, setLoading, ...data } = editorData || {};
 
+    // Generate metadata (title & description) via AI
+    const { title, description } = await generateMetadata(currentContent);
+
+    const { loading, setLoading, ...data } = editorData || {};
     const action = mode === "save" ? Save_Content : Publish_Content;
+
     const result = await action({
       ...data,
       result: currentContent,
