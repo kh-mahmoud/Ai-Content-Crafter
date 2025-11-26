@@ -31,10 +31,7 @@ export default function RootLayout({
     >
       <html lang="en">
          <head>
-        <meta
-          name="monetag"
-          content="d02132b02003dd4231612a3ff4116073"
-        />
+        <meta name="monetag" content="2dbfecd495a74fec2089088873a4fd6f">
       </head>
         <body className={`${poppins.variable}  antialiased`}>
           {children}
