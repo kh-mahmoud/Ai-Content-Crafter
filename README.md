@@ -71,5 +71,12 @@ Why settle for ordinary when you can unlock extraordinary?
 
 Give it a ⭐ and Step into the future of content creation to turn your ideas into impact.  
 
+---
 
+<div align="center">
+
+**🚀 Built with AI? Learn how**  
+[Start coding on Scrimba](https://scrimba.com/?via=u4f3b28) ·
+
+</div>
 
